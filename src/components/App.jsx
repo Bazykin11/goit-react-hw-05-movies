@@ -1,13 +1,19 @@
 import { Routes, Route, NavLink } from 'react-router-dom';
-// import { Movies } from '../pages/Movies';
-import { Home } from '../pages/Home';
-import { Movies } from '../pages/Movies'
-import MoviesDetails from '../components/MovieDetails';
-import Cast from '../components/Cast';
-import Reviews from '../components/Reviews';
+import { lazy, Suspense } from 'react';
+import styled from '@emotion/styled';
+import { Loader } from './Loader';
+
+
+const Home = lazy(() => import('../pages/Home'));
+const Movies = lazy(() => import('../pages/Movies'));
+const MoviesDetails = lazy(() => import('./MovieDetails'));
+const Cast = lazy(() => import('./Cast'));
+const Reviews = lazy(() => import('./Reviews'));
+
+
 
 // import { Layout } from 'pages/Layout';
-import styled from '@emotion/styled';
+
 
 
 
@@ -23,15 +29,16 @@ export const App = () => {
           <Link to="/Movies">Movies</Link>
         </nav>
       </Header>
-      <Routes>
-        {/* <Route path="/" element={<Layout />}></Route> */}
-        <Route index element={<Home />} />
-        <Route path="movies" element={<Movies />} />
-        <Route path="movies/:movieId" element={<MoviesDetails />}>
-          <Route path="cast" element={<Cast />} />
-          <Route path="reviews" element={<Reviews />} />
-        </Route>
-      </Routes>
+      <Suspense fallback={<Loader/>}>
+        <Routes>
+          <Route index element={<Home />} />
+          <Route path="movies" element={<Movies />} />
+          <Route path="movies/:movieId" element={<MoviesDetails />}>
+            <Route path="cast" element={<Cast />} />
+            <Route path="reviews" element={<Reviews />} />
+          </Route>
+        </Routes>
+      </Suspense>
     </Container>
   );
 };

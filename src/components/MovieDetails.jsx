@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import {
   useParams,
   NavLink,
@@ -9,6 +9,7 @@ import {
 import { fetchTrendsDetails } from './API/apiService';
 import { MovieCard } from 'components/MovieCard';
 import styled from '@emotion/styled';
+import { Loader } from './Loader';
 
 export default function MoviesDetails() {
   const [movieDetails, setMovieDetails] = useState({
@@ -20,6 +21,7 @@ export default function MoviesDetails() {
     title: '',
     vote_average: '',
   });
+   const [loader, setLoader] = useState(true);
   const { movieId } = useParams();
 
   useEffect(() => {
@@ -32,6 +34,8 @@ export default function MoviesDetails() {
         setMovieDetails(movieDetails);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoader(false);
       }
     }
     fetchMovieDetailsCard();
@@ -77,8 +81,12 @@ export default function MoviesDetails() {
             <LinkWrapp to="reviews">Reviews</LinkWrapp>
           </ul>
         </InfoWrapp>
-        <Outlet />
+        
+        <Suspense fallback={<Loader />}>
+          <Outlet />
+        </Suspense>
       </main>
+      {loader && <Loader />}
     </>
   );
 }

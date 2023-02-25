@@ -1,11 +1,12 @@
 import styled from '@emotion/styled';
 import { fetchTrends } from 'components/API/apiService';
+import { Loader } from 'components/Loader';
 import { MoviesList } from 'components/MoviesList';
 import { useState, useEffect } from 'react';
 
-export function Home() {
+export default function Home() {
   const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+   const [loader, setLoader] = useState(true);
 
   useEffect(() => {
     async function getTrends() {
@@ -15,12 +16,11 @@ export function Home() {
           return alert(`Movies not found`);
         } else {
           setMovies(movies);
-          setIsLoading(true);
         }
       } catch (error) {
         console.log(error);
       } finally {
-        setIsLoading(false);
+        setLoader(false);
       }
     }
     getTrends();
@@ -30,7 +30,7 @@ export function Home() {
     <main>
       <Title>Trending today</Title>
       {movies && <MoviesList movies={movies} />}
-      {isLoading}
+      {loader && <Loader />}
     </main>
   );
 }

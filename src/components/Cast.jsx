@@ -2,12 +2,14 @@ import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchCastInfo } from './API/apiService';
+import { Loader } from './Loader';
 
 
 
 export default function Cast() {
     const [castInfoDetails, setCastInfoDetails] = useState([]);
-    const [error, setError] = useState(false);
+  const [error, setError] = useState(false);
+  const [loader, setLoader] = useState(true);
   const { movieId } = useParams();
 
   useEffect(() => {
@@ -21,6 +23,8 @@ export default function Cast() {
         setCastInfoDetails(casts);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoader(false);
       }
     }
     castDetais();
@@ -29,7 +33,6 @@ export default function Cast() {
     
     return (
       <>
-        {castInfoDetails && (
           <CastList>
             {castInfoDetails.map(cast => (
               <CastItem key={cast.cast_id}>
@@ -48,9 +51,9 @@ export default function Cast() {
                 </div>
               </CastItem>
             ))}
-          </CastList>
-        )}
+        </CastList>
         {error && <p>We don't have cast for this movie </p>}
+        {loader && <Loader />}
       </>
     );
 }

@@ -2,14 +2,17 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchReviews } from './API/apiService';
 import styled from '@emotion/styled';
+import { Loader } from './Loader';
 
 export default function Reviews() {
   const [reviews, setReviews] = useState([]);
   const [error, setError] = useState(false);
-
+  const [loader, setLoader] = useState(true);
   const { movieId } = useParams();
 
   useEffect(() => {
+    setLoader(true);
+    console.log('hello');
     async function reviewsInfo() {
       try {
         const review = await fetchReviews(movieId);
@@ -18,9 +21,10 @@ export default function Reviews() {
           return alert('No reviews for this movie');
         }
         setReviews(review);
-        console.log(review.length);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoader(false);
       }
     }
     reviewsInfo();
@@ -28,7 +32,6 @@ export default function Reviews() {
 
   return (
     <>
-      {reviews && (
         <ReviewsList>
           {reviews.map(review => (
             <li key={review.id}>
@@ -37,11 +40,10 @@ export default function Reviews() {
             </li>
           ))}
         </ReviewsList>
-      )}
       {error && <p>We don't have review for this movie </p>}
+      {loader && <Loader />}
     </>
   );
-
 }
 
 
