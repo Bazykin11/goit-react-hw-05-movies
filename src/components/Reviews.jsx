@@ -12,7 +12,6 @@ export default function Reviews() {
 
   useEffect(() => {
     setLoader(true);
-    console.log('hello');
     async function reviewsInfo() {
       try {
         const review = await fetchReviews(movieId);

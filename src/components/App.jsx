@@ -26,7 +26,7 @@ export const App = () => {
           <Link to="/" end>
             Home
           </Link>
-          <Link to="/movies">Movies</Link>
+          <Link to="/moviesdet">Movies</Link>
         </nav>
       </Header>
       <Suspense fallback={<Loader/>}>
